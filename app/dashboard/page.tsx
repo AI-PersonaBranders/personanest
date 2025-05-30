@@ -161,7 +161,7 @@ export default function Dashboard() {
         {/* New Persona Dialog */}
         <Dialog
           open={dialogOpen}
-          onOpenChange={(_, open) => setDialogOpen(open)}
+          onOpenChange={(_event, data) => setDialogOpen(data.open)}
         >
           <DialogSurface>
             <DialogBody>
