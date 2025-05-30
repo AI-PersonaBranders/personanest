@@ -73,6 +73,7 @@ export default function Dashboard() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
+  const [systemPrompt, setSystemPrompt] = useState(''); // ← New state
 
   // Auth & load personas
   useEffect(() => {
@@ -96,12 +97,19 @@ export default function Dashboard() {
   const closeForm = () => {
     setName('');
     setDescription('');
+    setSystemPrompt('');    // ← Reset prompt too
     setDialogOpen(false);
   };
 
+  // ← Updated handleCreate
   const handleCreate = async () => {
     if (!user) return;
-    await createPersona(user.uid, name, description);
+    await createPersona(
+      user.uid,
+      name.trim(),
+      description.trim(),
+      systemPrompt.trim()   // ← Pass prompt
+    );
     const updated = await getPersonas(user.uid);
     setPersonas(updated);
     closeForm();
@@ -167,6 +175,7 @@ export default function Dashboard() {
             <DialogBody>
               <DialogTitle>Create New Persona</DialogTitle>
 
+              {/* Name Field */}
               <Input
                 placeholder="Name"
                 value={name}
@@ -174,6 +183,7 @@ export default function Dashboard() {
                 style={{ marginBottom: '1rem' }}
               />
 
+              {/* Description Field */}
               <Textarea
                 placeholder="Description"
                 value={description}
@@ -181,20 +191,25 @@ export default function Dashboard() {
                 style={{ marginBottom: '1rem' }}
               />
 
+              {/* System Prompt Field */}
               <Textarea
-placeholder="System Prompt (how the AI should behave)"
-value={systemPrompt}
-onChange={(_, data) => setSystemPrompt(data.value)}
-style={{ marginBottom: '1rem' }}
-/>
-              
+                placeholder="System Prompt (how the AI should behave)"
+                value={systemPrompt}
+                onChange={(_, data) => setSystemPrompt(data.value)}
+                style={{ marginBottom: '1rem' }}
+              />
+
               <DialogActions>
                 <Button appearance="secondary" onClick={closeForm}>
                   Cancel
                 </Button>
                 <Button
                   appearance="primary"
-                  disabled={!name.trim() || !description.trim()}
+                  disabled={
+                    !name.trim() ||
+                    !description.trim() ||
+                    !systemPrompt.trim()  // ← include prompt
+                  }
                   onClick={handleCreate}
                 >
                   Create
