@@ -4,7 +4,8 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { onAuthStateChanged, signOut, User } from 'firebase/auth';
 import { auth } from '../firebase';
-import { getPersonas } from '@/lib/firestore';
+import { getPersonas } from '../../lib/firestore';
+
 import {
   FluentProvider,
   webLightTheme,
