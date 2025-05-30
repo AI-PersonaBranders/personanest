@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { onAuthStateChanged, signOut, User } from 'firebase/auth';
 import { auth } from '../firebase';
+import { getPersonas } from '@/lib/firestore';
 import {
   FluentProvider,
   webLightTheme,
@@ -39,11 +40,23 @@ const useStyles = makeStyles({
     color: tokens.colorNeutralForeground2,
     marginBottom: '1rem',
   },
+  personaList: {
+    marginTop: '2rem',
+    textAlign: 'left',
+    width: '100%',
+  },
+  personaItem: {
+    marginBottom: '0.5rem',
+    padding: '0.5rem',
+    backgroundColor: tokens.colorNeutralBackground2,
+    borderRadius: '8px',
+  },
 });
 
 export default function Dashboard() {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
+  const [personas, setPersonas] = useState<any[]>([]);
   const styles = useStyles();
 
   useEffect(() => {
@@ -52,6 +65,7 @@ export default function Dashboard() {
         router.push('/');
       } else {
         setUser(user);
+        getPersonas(user.uid).then(setPersonas);
       }
     });
 
@@ -80,6 +94,22 @@ export default function Dashboard() {
               <Button appearance="secondary" onClick={handleLogout}>
                 Log out
               </Button>
+
+              <div className={styles.personaList}>
+                <h3>Your Personas</h3>
+                {personas.length > 0 ? (
+                  <ul>
+                    {personas.map((persona) => (
+                      <li key={persona.id} className={styles.personaItem}>
+                        <strong>{persona.name}</strong><br />
+                        <span>{persona.description}</span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p>No personas yet.</p>
+                )}
+              </div>
             </>
           )}
         </div>
