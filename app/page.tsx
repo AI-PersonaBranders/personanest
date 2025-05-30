@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { signInWithPopup } from 'firebase/auth';
 import { auth, provider } from './firebase';
 import { Button, FluentProvider, webLightTheme, makeStyles, shorthands, tokens } from '@fluentui/react-components';
@@ -22,6 +23,7 @@ const useStyles = makeStyles({
     display: 'flex',
     flexDirection: 'column',
     gap: '20px',
+    textAlign: 'center',
   },
   heading: {
     fontSize: '24px',
@@ -35,11 +37,23 @@ const useStyles = makeStyles({
 
 export default function Home() {
   const styles = useStyles();
+  const router = useRouter();
 
   const handleLogin = async () => {
     try {
       const result = await signInWithPopup(auth, provider);
-      console.log('✅ Logged in as:', result.user.displayName);
+      const user = result.user;
+
+      // Save user to localStorage
+      const userData = {
+        name: user.displayName,
+        email: user.email,
+        photo: user.photoURL,
+      };
+      localStorage.setItem('user', JSON.stringify(userData));
+
+      // Redirect to dashboard
+      router.push('/dashboard');
     } catch (err) {
       console.error('Login error:', err);
     }
