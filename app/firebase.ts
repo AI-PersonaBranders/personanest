@@ -18,24 +18,3 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const provider = new GoogleAuthProvider();
 export const db = getFirestore(app);
-
-export { auth, provider, db };
-
-export const createPersona = async (
-  userId: string,
-  name: string,
-  description: string,
-  systemPrompt: string,
-  avatarUrl = ''
-) => {
-  const personasRef = collection(db, 'users', userId, 'personas');
-  return await addDoc(personasRef, {
-    name,
-    description,
-    systemPrompt,
-    avatarUrl,
-    createdAt: serverTimestamp(),
-    updatedAt: serverTimestamp(),
-    public: false,
-  });
-};
