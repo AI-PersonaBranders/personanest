@@ -1,7 +1,7 @@
 'use client';
 
 import { signInWithPopup } from 'firebase/auth';
-import { auth, provider } from '../firebase';
+import { auth, provider } from './firebase';
 import { Button, FluentProvider, webLightTheme, makeStyles, shorthands, tokens } from '@fluentui/react-components';
 
 const useStyles = makeStyles({
