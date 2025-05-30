@@ -181,6 +181,13 @@ export default function Dashboard() {
                 style={{ marginBottom: '1rem' }}
               />
 
+              <Textarea
+placeholder="System Prompt (how the AI should behave)"
+value={systemPrompt}
+onChange={(_, data) => setSystemPrompt(data.value)}
+style={{ marginBottom: '1rem' }}
+/>
+              
               <DialogActions>
                 <Button appearance="secondary" onClick={closeForm}>
                   Cancel
