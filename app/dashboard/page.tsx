@@ -11,7 +11,7 @@ import { auth } from '../firebase';
 import {
   createPersona,
   getPersonas,
-} from '../../lib/firestore';          // <-- relative path to your lib
+} from '../../lib/firestore';
 import {
   FluentProvider,
   webLightTheme,
@@ -19,7 +19,8 @@ import {
   Avatar,
   makeStyles,
   tokens,
-  TextField,
+  Input,
+  Textarea,
   Dialog,
   DialogSurface,
   DialogBody,
@@ -101,7 +102,6 @@ export default function Dashboard() {
   const handleCreate = async () => {
     if (!user) return;
     await createPersona(user.uid, name, description);
-    // reload
     const updated = await getPersonas(user.uid);
     setPersonas(updated);
     closeForm();
@@ -159,23 +159,28 @@ export default function Dashboard() {
         </div>
 
         {/* New Persona Dialog */}
-        <Dialog open={dialogOpen} onOpenChange={(_, open) => setDialogOpen(open)}>
+        <Dialog
+          open={dialogOpen}
+          onOpenChange={(_, open) => setDialogOpen(open)}
+        >
           <DialogSurface>
             <DialogBody>
               <DialogTitle>Create New Persona</DialogTitle>
-              <TextField
-                label="Name"
+
+              <Input
+                placeholder="Name"
                 value={name}
                 onChange={(_, data) => setName(data.value)}
                 style={{ marginBottom: '1rem' }}
               />
-              <TextField
-                label="Description"
+
+              <Textarea
+                placeholder="Description"
                 value={description}
                 onChange={(_, data) => setDescription(data.value)}
-                multiline
-                rows={3}
+                style={{ marginBottom: '1rem' }}
               />
+
               <DialogActions>
                 <Button appearance="secondary" onClick={closeForm}>
                   Cancel
